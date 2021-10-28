@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+    <head>
+        <script>
+            const addContentInElement = (selector, content) => 
+                document.querySelector(selector).textContent = content;
+        </script>
+    </head>
+    <body>
+        <h5>O this no escopo global está associado ao objeto  global/window</h5>
+        <code id="global-scope"></code>
+        
+        <script>
+            addContentInElement('#global-scope', 
+                `this = window ? ${this === window} ... this === globalThis ? ${this === globalThis}`);
+        </script>
+
+        <h5>Se executado dentro de uma função sem o modo estrito permanece atrelado ao objeto global/window</h5>
+        <code id="function-scope"></code>
+        <script>
+            function functionScope(){
+                addContentInElement('#function-scope', 
+                    `this = window ? ${this === window} ... this === globalThis ? ${this === globalThis}`);
+            }
+            functionScope();
+        </script>
+        
+        <h5>Ao utilizar o modo estrito, o this no escopo da função pertence a própria função</h5>
+        <code id="function-scope-strict"></code>
+        <script>
+            'use strict';   
+            function functionScope(){
+                addContentInElement('#function-scope-strict', 
+                    `this = window ? ${this === window} ... this === globalThis ? ${this === globalThis}`);
+            }
+            functionScope();
+        </script>
+
+        <h5>O this usado em um elemento pertence ao contexto do elemento</h5>
+        <button onclick="this.style.background = 'yellow';">Element Scope Inline</button>
+        <button onclick="eventHandlerElementScope(this)">Element Scope Function</button>
+        <script>
+            function eventHandlerElementScope(thisScope){
+                thisScope.style.background = `lightgreen`;
+            };
+        </script>
+
+        <h5>O this usado dentro de um objeto literal pertence ao contexto do objeto associado</h5>
+        <code id="object-literal-scope"></code>
+        <script>
+            const sum = {
+                numberOne: 10, numberTwo: 5,
+                addNumbers: function(){ return this.numberOne + this.numberTwo; }
+            };
+            addContentInElement('#object-literal-scope', `${sum.numberOne} + ${sum.numberTwo} = ${sum.addNumbers()}`);
+        </script>
+
+    <h5>O this usado através do método apply ou call pertence ao objeto passado como parâmetro</h5>
+    <code id="call-method-scope"></code>
+    <code id="apply-method-scope"></code>
+    <script>
+        const multiply = {
+            numberOne: 10, numberTwo: 5,
+            multiplyNumbers: function(){ return this.numberOne * this.numberTwo; }
+        };
+        const otherOne = { numberOne: 2, numberTwo: 4 };
+        const otherTwo = { numberOne: 3, numberTwo: 5 };
+        addContentInElement('#call-method-scope', 
+            `call: ${otherOne.numberOne} * ${otherOne.numberTwo} = ${multiply.multiplyNumbers.call(otherOne)}`);
+        addContentInElement('#apply-method-scope', 
+            `... apply: ${otherTwo.numberOne} * ${otherTwo.numberTwo} = ${multiply.multiplyNumbers.apply(otherTwo)}`);
+    </script>
+
+    <h5>O this em uma função construtora pertence a referencia do objeto instanciado</h5>
+    <code id="constructor-function-scope"></code>
+    <script>
+        function Subtract(n1, n2){
+            this.numberOne = n1;
+            this.numberTwo = n2;
+            this.subtractNumbers = function(){ return this.numberOne - this.numberTwo; }
+        };
+        const subtractInstance = new Subtract(9, 3);
+        addContentInElement('#constructor-function-scope', 
+            `${subtractInstance.numberOne} - ${subtractInstance.numberTwo} = ${subtractInstance.subtractNumbers()}`);
+    </script>
+    </body>
+</html>
