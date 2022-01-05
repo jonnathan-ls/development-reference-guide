@@ -1,0 +1,55 @@
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Exception</title>
+    <script>
+
+        const addContentInElement = (selector, content) => 
+            document.querySelector(selector).textContent = content;
+
+        const errorHandler = (error, selector) => 
+            addContentInElement(selector, `${error.name}: ${error.message}`);
+
+    </script>
+</head>
+<body>
+    <h4>Tipos de <code>error</code></h4>
+    <button onclick="execErrorType()">Exec Error Type</button>
+    <select id="errorInput">
+        <option>ReferenceError</option>
+        <option>RangeError</option>
+        <option>TypeError</option>
+        <option>URIError</option>
+        <option>SyntaxError</option>
+        <option>EvalError</option>
+        <option>CustomError</option>
+    </select>
+    <br><br>
+    <code id="error-type"></code>
+    <script>
+
+        function execError(type){
+            switch (type) {
+                case "ReferenceError": const errorReference = varNotDeclared / 10; break;
+                case "RangeError": const zero = 0; zero.toPrecision(200); break;
+                case "TypeError": const num = 0; num.toUpperCase(); break;
+                case "URIError": decodeURI("https://www.google%%%.com.br/"); break;
+                case "SyntaxError": eval("alert('missing single cote)"); break;
+                case "EvalError": 
+                    throw new EvalError(`EvalError não é usado na especificação ECMAScript -
+                    https://developer.mozilla.org/pt-BR/docs/Web/JavaScript/Reference/Global_Objects/EvalError`); break;
+                default: throw { name: "CustomError", message: "Mensagem de descrição" }; break;
+            }
+        }
+
+        function execErrorType() {
+            const erroType = document.querySelector("#errorInput").value;
+            try { execError(erroType); } 
+            catch (error) { errorHandler(error, '#error-type') }
+        }
+        
+    </script>
+</body>
+</html>
