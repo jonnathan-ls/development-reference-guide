@@ -1,0 +1,10 @@
+:root {
+    --primary-color: orange;
+    --second-color: rgb(66, 66, 239);
+    --third-color: rgb(79, 241, 79);
+
+    body {
+        background-color: gray;
+        color: lightcyan;
+    }
+}

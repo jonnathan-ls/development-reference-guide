@@ -1,0 +1,10 @@
+:root {
+    --primary-color: rgb(43, 43, 216);
+    --second-color: rgb(243, 163, 14);
+    --third-color: red;
+
+    body {
+        background-color: lightyellow;
+        color: darkslategray;
+    }
+}
